@@ -1,0 +1,242 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.ALL;
+use IEEE.std_logic_unsigned.ALL;
+
+LIBRARY lpm;
+USE lpm.all;
+
+ENTITY contadorWHora IS 
+GENERIC( frequencia	: NATURAL := 250000; --250khz p/validação
+			n 				: INTEGER := 6); -- define no. de contadores); -- 50MHz
+    PORT(clk						: IN STD_LOGIC; 
+			rst						: IN STD_LOGIC; 
+			habilita_contador		: IN STD_LOGIC; 
+			sentido					: IN STD_LOGIC;
+			habilita_paralelo		: IN STD_LOGIC; 
+			dado_paralelo			: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+			sel_1,sel_2,sel_3		: IN STD_LOGIC;
+			overflow					: BUFFER STD_LOGIC;
+			teste						: OUT STD_LOGIC;
+			led						: OUT STD_LOGIC_VECTOR(1 TO 6);
+			sa,sb,sc,sd,se,sf,sg	: OUT STD_LOGIC_VECTOR(5 downto 0));
+END contadorWHora;
+
+ARCHITECTURE teste_contadorWHora OF contadorWHora IS 
+
+COMPONENT divisorFrequencia 
+GENERIC( frequencia_osc : NATURAL); -- 12.5Mhz (padrao p/ teste)
+	PORT(	clk	: IN STD_LOGIC;
+			pulso	: OUT STD_LOGIC); 
+END COMPONENT;
+
+COMPONENT decodificador7segmentos
+	PORT (entrada_display		: IN STD_LOGIC_VECTOR(4 downto 0);
+			a, b, c, d, e, f, g 	: OUT STD_LOGIC);
+END COMPONENT;
+
+COMPONENT decodificador7segmentosDezHora
+	PORT (entrada_display		: IN STD_LOGIC_VECTOR(4 downto 0);
+			a, b, c, d, e, f, g 	: OUT STD_LOGIC);
+END COMPONENT;
+			
+COMPONENT contaUnidade_PM 
+	PORT(	cin		: IN STD_LOGIC ;
+			clock		: IN STD_LOGIC ;
+			data		: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+			sclr		: IN STD_LOGIC ;
+			sload		: IN STD_LOGIC ;
+			updown	: IN STD_LOGIC ;
+			cout		: OUT STD_LOGIC ;
+			q			: OUT STD_LOGIC_VECTOR (4 DOWNTO 0));
+END COMPONENT;
+
+COMPONENT contaDezena_PM 
+	PORT(	cin		: IN STD_LOGIC ;
+			clock		: IN STD_LOGIC ;
+			data		: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+			sclr		: IN STD_LOGIC ;
+			sload		: IN STD_LOGIC ;
+			updown	: IN STD_LOGIC ;
+			cout		: OUT STD_LOGIC ;
+			q			: OUT STD_LOGIC_VECTOR (4 DOWNTO 0));
+END COMPONENT;
+
+COMPONENT contaHora2_PM
+PORT
+	(	clock		: IN STD_LOGIC ;
+		cnt_en	: IN STD_LOGIC ;
+		data		: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+		sclr		: IN STD_LOGIC ;
+		sload		: IN STD_LOGIC ;
+		updown	: IN STD_LOGIC ;
+		cout		: OUT STD_LOGIC ;
+		q			: OUT STD_LOGIC_VECTOR (4 DOWNTO 0));
+END COMPONENT;
+
+-- interligacao habilita_prox_contador->habilita_contador 
+SIGNAL enable						: STD_LOGIC_VECTOR(1 TO n-1); 
+SIGNAL pulso1s						: STD_LOGIC; 
+SIGNAL habilita_dez_hora		: STD_LOGIC;
+SIGNAL saida_contador_u 		: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL saida_contador_d 		: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL saida_contador_c 		: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL saida_contador_m 		: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL saida_contador_dm		: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL saida_contador_meg 		: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL mem_saida_contador_u 	: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL mem_saida_contador_d 	: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL mem_saida_contador_c 	: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL mem_saida_contador_m 	: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL mem_saida_contador_dm	: STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL mem_saida_contador_meg : STD_LOGIC_VECTOR(4 downto 0):= (OTHERS => '0');
+SIGNAL dado_paralelo_u 			: STD_LOGIC_VECTOR (4 DOWNTO 0):= (OTHERS => '0');
+SIGNAL dado_paralelo_d			: STD_LOGIC_VECTOR (4 DOWNTO 0):= (OTHERS => '0');
+SIGNAL dado_paralelo_c 			: STD_LOGIC_VECTOR (4 DOWNTO 0):= (OTHERS => '0');
+SIGNAL dado_paralelo_m			: STD_LOGIC_VECTOR (4 DOWNTO 0):= (OTHERS => '0');
+SIGNAL dado_paralelo_dm			: STD_LOGIC_VECTOR (4 DOWNTO 0):= (OTHERS => '0');
+SIGNAL dado_paralelo_meg		: STD_LOGIC_VECTOR (4 DOWNTO 0):= (OTHERS => '0');
+SIGNAL sel_mux						: STD_LOGIC_VECTOR (2 DOWNTO 0):= (OTHERS => '0');
+SIGNAL ot_mux						: STD_LOGIC_VECTOR(3 downto 0):= (OTHERS => '0');
+SIGNAL flag 						: STD_LOGIC;
+BEGIN 
+-- ajuste do relogio
+sel_mux <= sel_3 & sel_2 & sel_1; -- atribui "s1" para "sel[1]" e "s0" para "sel[0]"
+	abc: PROCESS(sel_mux, habilita_paralelo) -- sinal "sel" inserido na lista
+	BEGIN
+		CASE sel_mux IS
+			WHEN "000" => dado_paralelo_u 	<= dado_paralelo;
+							  dado_paralelo_d		<= mem_saida_contador_d;
+							  dado_paralelo_c		<= mem_saida_contador_c;
+							  dado_paralelo_m		<= mem_saida_contador_m;
+							  dado_paralelo_dm 	<= mem_saida_contador_dm;
+							  dado_paralelo_meg	<= mem_saida_contador_meg;
+			WHEN "001" => dado_paralelo_d 	<= dado_paralelo;
+			WHEN "010" => dado_paralelo_c 	<= dado_paralelo; 
+			WHEN "011" => dado_paralelo_m 	<= dado_paralelo;
+			WHEN "100" => dado_paralelo_dm 	<= dado_paralelo; 
+			WHEN "111" => dado_paralelo_meg	<= dado_paralelo; 
+			WHEN OTHERS => ot_mux <= null;
+		END CASE;
+	END PROCESS abc;
+-- Divisor de frequencia
+div_f0:	divisorFrequencia 
+GENERIC MAP(frequencia)
+	PORT MAP(clk, pulso1s); 
+-- leds
+PROCESS(enable(1),enable(2),enable(3),enable(4),enable(5),overflow)
+	BEGIN 
+		IF dado_paralelo(0)='1' THEN 
+			led(1) <= '1'; 
+		ELSE led(1) <= '0';	
+		END IF;
+		IF dado_paralelo(1)='1'  THEN 
+			led(2) <= '1'; 
+		ELSE led(2) <= '0';	
+		END IF;
+		IF dado_paralelo(2)='1'  THEN 
+			led(3) <= '1'; 
+		ELSE led(3) <= '0';	
+		END IF;
+		IF dado_paralelo(3)='1'  THEN 
+			led(4) <= '1'; 
+		ELSE led(4) <= '0';	
+		END IF;
+		IF dado_paralelo(4)='1'  THEN 
+			led(5) <= '1'; 
+		ELSE led(5) <= '0';	
+		END IF;
+		IF overflow ='1'  THEN 
+			led(6) <= '1'; 
+		ELSE led(6) <= '0';	
+		END IF;
+END PROCESS;
+
+-- limpa ultimo valor 
+PROCESS(saida_contador_u,saida_contador_d,saida_contador_c,saida_contador_m,saida_contador_dm, saida_contador_meg)
+	BEGIN 
+		IF habilita_paralelo = '0' THEN
+			mem_saida_contador_u 	<= "00000";
+			mem_saida_contador_d 	<= "00000";
+			mem_saida_contador_c	 	<= "00000";
+			mem_saida_contador_m 	<= "00000";
+			mem_saida_contador_dm 	<= "00000";
+			mem_saida_contador_meg 	<= "00000";
+		END IF;
+END PROCESS;
+
+-- Display
+	-- 10^0
+	u_c:	contaUnidade_PM 
+		PORT MAP(cin		=> habilita_contador,
+					clock 	=>	pulso1s,
+					data		=> dado_paralelo_u,
+					sclr		=>	rst,
+					sload		=> habilita_paralelo,
+					updown	=> sentido,
+					cout		=> enable(1),
+					q			=> saida_contador_u);
+	u_d:	decodificador7segmentos 
+		PORT MAP( saida_contador_u, sa(0), sb(0), sc(0), sd(0), se(0), sf(0), sg(0));
+	-- 10^1
+	d_u: 	contaDezena_PM 
+		PORT MAP(cin		=> enable(1),
+					clock 	=>	pulso1s,
+					data		=> dado_paralelo_d,
+					sclr		=>	rst,
+					sload		=> habilita_paralelo,
+					updown	=> sentido,
+					cout		=> enable(2),
+					q			=> saida_contador_d);
+	d_c:	decodificador7segmentos 
+		PORT MAP( saida_contador_d, sa(1), sb(1), sc(1), sd(1), se(1), sf(1), sg(1));	
+	-- 10^2
+	c_u:	contaUnidade_PM 
+		PORT MAP(cin		=> enable(2),
+					clock 	=>	pulso1s,
+					data		=> dado_paralelo_c,
+					sclr		=>	rst,
+					sload		=> habilita_paralelo,
+					updown	=> sentido,
+					cout		=> enable(3),
+					q			=> saida_contador_c);
+	c_d: decodificador7segmentos 
+		PORT MAP( saida_contador_c, sa(2), sb(2), sc(2), sd(2), se(2), sf(2), sg(2));			
+	-- 10^3
+	m_c:	contaDezena_PM 
+		PORT MAP(cin		=> enable(3),
+					clock 	=>	pulso1s,
+					data		=> dado_paralelo_m,
+					sclr		=>	rst,
+					sload		=> habilita_paralelo,
+					updown	=> sentido,
+					cout		=> enable(4),
+					q			=> saida_contador_m);
+	m_d: decodificador7segmentos 
+		PORT MAP( saida_contador_m, sa(3), sb(3), sc(3), sd(3), se(3), sf(3), sg(3));		
+	-- 10^4
+	dm_c:	contaHora2_PM 
+		PORT MAP(cnt_en	=> enable(4), 
+					clock 	=>	pulso1s,
+					data		=> dado_paralelo_dm,
+					sclr		=>	rst,
+					sload		=> habilita_paralelo,
+					updown	=> sentido,
+					cout		=> enable(5),
+					q			=> saida_contador_dm);
+	dm_d: decodificador7segmentos 
+		PORT MAP( saida_contador_dm, sa(4), sb(4), sc(4), sd(4), se(4), sf(4), sg(4));		
+	-- 10^5
+	meg_c:	contaHora2_PM 
+		PORT MAP(cnt_en	=> enable(4), 
+					clock 	=>	pulso1s,
+					data		=> dado_paralelo_meg+dado_paralelo_dm,
+					sclr		=>	rst,
+					sload		=> habilita_paralelo,
+					updown	=> sentido,
+					cout		=> overflow,
+					q			=> saida_contador_meg);
+	meg_d: decodificador7segmentosDezHora 	
+	PORT MAP( saida_contador_meg, sa(5), sb(5), sc(5), sd(5), se(5), sf(5), sg(5));		
+
+END teste_contadorWHora;

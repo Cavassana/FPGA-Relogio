@@ -1,0 +1,126 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2013 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II 64-Bit
+# Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+# Date created = 13:24:57  December 12, 2020
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		relogioFinal_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "Cyclone II"
+set_global_assignment -name DEVICE EP2C5T144C8
+set_global_assignment -name TOP_LEVEL_ENTITY relogioFinal
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "13:24:57  DECEMBER 12, 2020"
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name DEVICE_FILTER_PACKAGE TQFP
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name VHDL_FILE relogioFinal.vhd
+set_global_assignment -name VHDL_FILE contadorMOD60.vhd
+set_global_assignment -name VHDL_FILE contaHora.vhd
+set_global_assignment -name VHDL_FILE decode7seg_rel.vhd
+set_global_assignment -name VHDL_FILE divisorFrequencia.vhd
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_location_assignment PIN_17 -to clk
+set_location_assignment PIN_47 -to dado_paralelo[3]
+set_location_assignment PIN_114 -to dado_paralelo[2]
+set_location_assignment PIN_112 -to dado_paralelo[1]
+set_location_assignment PIN_113 -to dado_paralelo[0]
+set_location_assignment PIN_52 -to habilita_contador
+set_location_assignment PIN_51 -to habilita_paralelo
+set_location_assignment PIN_44 -to led[1]
+set_location_assignment PIN_45 -to led[2]
+set_location_assignment PIN_43 -to led[3]
+set_location_assignment PIN_42 -to led[4]
+set_location_assignment PIN_41 -to led[5]
+set_location_assignment PIN_40 -to led[6]
+set_location_assignment PIN_3 -to overflow
+set_location_assignment PIN_26 -to rst
+set_location_assignment PIN_122 -to sa[5]
+set_location_assignment PIN_132 -to sa[4]
+set_location_assignment PIN_137 -to sa[3]
+set_location_assignment PIN_142 -to sa[2]
+set_location_assignment PIN_69 -to sa[1]
+set_location_assignment PIN_64 -to sa[0]
+set_location_assignment PIN_125 -to sb[5]
+set_location_assignment PIN_133 -to sb[4]
+set_location_assignment PIN_136 -to sb[3]
+set_location_assignment PIN_143 -to sb[2]
+set_location_assignment PIN_70 -to sb[1]
+set_location_assignment PIN_63 -to sb[0]
+set_location_assignment PIN_75 -to sc[5]
+set_location_assignment PIN_118 -to sc[4]
+set_location_assignment PIN_92 -to sc[3]
+set_location_assignment PIN_96 -to sc[2]
+set_location_assignment PIN_100 -to sc[1]
+set_location_assignment PIN_104 -to sc[0]
+set_location_assignment PIN_74 -to sd[5]
+set_location_assignment PIN_86 -to sd[4]
+set_location_assignment PIN_87 -to sd[3]
+set_location_assignment PIN_94 -to sd[2]
+set_location_assignment PIN_99 -to sd[1]
+set_location_assignment PIN_103 -to sd[0]
+set_location_assignment PIN_119 -to se[5]
+set_location_assignment PIN_79 -to se[4]
+set_location_assignment PIN_115 -to se[3]
+set_location_assignment PIN_93 -to se[2]
+set_location_assignment PIN_97 -to se[1]
+set_location_assignment PIN_101 -to se[0]
+set_location_assignment PIN_55 -to sel_1
+set_location_assignment PIN_53 -to sel_2
+set_location_assignment PIN_57 -to sel_3
+set_location_assignment PIN_4 -to sentido
+set_location_assignment PIN_121 -to sf[5]
+set_location_assignment PIN_126 -to sf[4]
+set_location_assignment PIN_135 -to sf[3]
+set_location_assignment PIN_139 -to sf[2]
+set_location_assignment PIN_71 -to sf[1]
+set_location_assignment PIN_65 -to sf[0]
+set_location_assignment PIN_120 -to sg[5]
+set_location_assignment PIN_129 -to sg[4]
+set_location_assignment PIN_134 -to sg[3]
+set_location_assignment PIN_141 -to sg[2]
+set_location_assignment PIN_72 -to sg[1]
+set_location_assignment PIN_67 -to sg[0]
+set_location_assignment PIN_48 -to dado_paralelo[4]
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_location_assignment PIN_7 -to pisca_placa[0]
+set_location_assignment PIN_9 -to pisca_placa[1]
+set_location_assignment PIN_32 -to led[8]
+set_location_assignment PIN_31 -to led[7]
+set_global_assignment -name CDF_FILE output_files/Chain2.cdf
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

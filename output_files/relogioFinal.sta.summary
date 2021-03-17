@@ -1,0 +1,165 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow Model Setup 'divisorFrequencia:div_f0|pulso'
+Slack : -13.636
+TNS   : -393.065
+
+Type  : Slow Model Setup 'habilita_paralelo'
+Slack : -7.123
+TNS   : -117.148
+
+Type  : Slow Model Setup 'clk'
+Slack : -4.221
+TNS   : -74.589
+
+Type  : Slow Model Setup 'habilita_alarme'
+Slack : -0.209
+TNS   : -0.626
+
+Type  : Slow Model Setup 'sel_1'
+Slack : 0.155
+TNS   : 0.000
+
+Type  : Slow Model Setup 'sel_2'
+Slack : 0.229
+TNS   : 0.000
+
+Type  : Slow Model Hold 'divisorFrequencia:div_f0|pulso'
+Slack : -5.867
+TNS   : -23.431
+
+Type  : Slow Model Hold 'sel_1'
+Slack : -1.349
+TNS   : -10.507
+
+Type  : Slow Model Hold 'sel_2'
+Slack : -1.301
+TNS   : -10.843
+
+Type  : Slow Model Hold 'clk'
+Slack : -1.119
+TNS   : -1.119
+
+Type  : Slow Model Hold 'habilita_alarme'
+Slack : 0.125
+TNS   : 0.000
+
+Type  : Slow Model Hold 'habilita_paralelo'
+Slack : 4.758
+TNS   : 0.000
+
+Type  : Slow Model Recovery 'divisorFrequencia:div_f0|pulso'
+Slack : -13.288
+TNS   : -113.836
+
+Type  : Slow Model Removal 'divisorFrequencia:div_f0|pulso'
+Slack : 1.618
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'divisorFrequencia:div_f0|pulso'
+Slack : -2.072
+TNS   : -103.388
+
+Type  : Slow Model Minimum Pulse Width 'clk'
+Slack : -1.941
+TNS   : -30.137
+
+Type  : Slow Model Minimum Pulse Width 'habilita_alarme'
+Slack : -1.777
+TNS   : -24.037
+
+Type  : Slow Model Minimum Pulse Width 'habilita_paralelo'
+Slack : -1.777
+TNS   : -1.777
+
+Type  : Slow Model Minimum Pulse Width 'sel_1'
+Slack : -1.777
+TNS   : -1.777
+
+Type  : Slow Model Minimum Pulse Width 'sel_2'
+Slack : -1.777
+TNS   : -1.777
+
+Type  : Fast Model Setup 'divisorFrequencia:div_f0|pulso'
+Slack : -3.972
+TNS   : -106.411
+
+Type  : Fast Model Setup 'habilita_paralelo'
+Slack : -2.201
+TNS   : -33.678
+
+Type  : Fast Model Setup 'clk'
+Slack : -0.776
+TNS   : -12.392
+
+Type  : Fast Model Setup 'sel_1'
+Slack : 0.723
+TNS   : 0.000
+
+Type  : Fast Model Setup 'sel_2'
+Slack : 0.790
+TNS   : 0.000
+
+Type  : Fast Model Setup 'habilita_alarme'
+Slack : 0.816
+TNS   : 0.000
+
+Type  : Fast Model Hold 'divisorFrequencia:div_f0|pulso'
+Slack : -2.124
+TNS   : -8.463
+
+Type  : Fast Model Hold 'clk'
+Slack : -0.990
+TNS   : -0.990
+
+Type  : Fast Model Hold 'sel_2'
+Slack : -0.831
+TNS   : -7.286
+
+Type  : Fast Model Hold 'sel_1'
+Slack : -0.699
+TNS   : -6.343
+
+Type  : Fast Model Hold 'habilita_alarme'
+Slack : -0.178
+TNS   : -1.030
+
+Type  : Fast Model Hold 'habilita_paralelo'
+Slack : 1.903
+TNS   : 0.000
+
+Type  : Fast Model Recovery 'divisorFrequencia:div_f0|pulso'
+Slack : -4.008
+TNS   : -34.500
+
+Type  : Fast Model Removal 'divisorFrequencia:div_f0|pulso'
+Slack : 0.477
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'clk'
+Slack : -1.380
+TNS   : -20.380
+
+Type  : Fast Model Minimum Pulse Width 'habilita_alarme'
+Slack : -1.222
+TNS   : -16.222
+
+Type  : Fast Model Minimum Pulse Width 'habilita_paralelo'
+Slack : -1.222
+TNS   : -1.222
+
+Type  : Fast Model Minimum Pulse Width 'sel_1'
+Slack : -1.222
+TNS   : -1.222
+
+Type  : Fast Model Minimum Pulse Width 'sel_2'
+Slack : -1.222
+TNS   : -1.222
+
+Type  : Fast Model Minimum Pulse Width 'divisorFrequencia:div_f0|pulso'
+Slack : -0.500
+TNS   : -38.458
+
+------------------------------------------------------------

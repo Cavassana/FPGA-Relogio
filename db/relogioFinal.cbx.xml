@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="relogioFinal">
+		<CBX_INST_ENTRY INSTANCE_NAME="|relogioFinal|contadorMOD60:c_c|lpm_counter:LPM_COUNTER_component" CBX_FILE_NAME="cntr_9vj.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|relogioFinal|contadorMOD60:m_c|lpm_counter:LPM_COUNTER_component" CBX_FILE_NAME="cntr_utj.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|relogioFinal|contadorMOD60:u_c|lpm_counter:LPM_COUNTER_component" CBX_FILE_NAME="cntr_9vj.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|relogioFinal|contaHora:dm_c|lpm_counter:LPM_COUNTER_component" CBX_FILE_NAME="cntr_b9k.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|relogioFinal|contaHora:meg_c|lpm_counter:LPM_COUNTER_component" CBX_FILE_NAME="cntr_b9k.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|relogioFinal|contadorMOD60:d_c|lpm_counter:LPM_COUNTER_component" CBX_FILE_NAME="cntr_utj.tdf"/>
+	</PROJECT>
+</LOG_ROOT>
